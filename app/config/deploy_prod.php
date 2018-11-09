@@ -7,15 +7,16 @@ return new class extends DefaultDeployer
     public function configure()
     {
         return $this->getConfigBuilder()
+            ->useSshAgentForwarding(true)
             // SSH connection string to connect to the remote server (format: user@host-or-IP:port-number)
             ->server('root@185.166.213.170')
             // the absolute path of the remote server directory where the project is deployed
             ->deployDir('/var/www/html/noticiario')
             // the URL of the Git repository where the project code is hosted
-            //->repositoryUrl('https://github.com/symfony/symfony-demo')
+            //->repositoryUrl('https://github.com/angulonavas/noticiario')
+            ->repositoryUrl('git@github.com:angulonavas/noticiario.git')
             // the repository branch to deploy
-            ->repositoryBranch('noticiario')
-            //->repositoryBranch('master')
+            ->repositoryBranch('master')
         ;
     }
 
