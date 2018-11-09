@@ -1,0 +1,214 @@
+@CHARSET "UTF-8";
+@font-face { 
+	font-family: "OpenSans-Light"; 
+	src: url("../../fuentes/open-sans/OpenSans-Light.ttf"); }
+
+body {
+	font: 1em "OpenSans-Light", Sans;
+	font-size: 20px;
+}
+
+@media (min-width: 1px) {
+
+	body {
+		margin: auto;
+	}
+
+	h1 {
+		font-family: 'Open Sans';
+	    font-size: 40px;
+	    font-weight: 200;    
+	}
+
+	h2 {
+		font-family: 'OpenSans-Light';
+	    font-size: 20px;  
+	}
+
+	h3 {
+		font-family: 'Open Sans';
+		font-size: 15px;
+	    font-weight: 400;
+	    color: green;
+	}	
+
+	h4 {
+		font-family: 'Open Sans';
+		font-size: 20px;
+	    font-weight: 200;
+	    line-height: 200%;
+	    margin-top: 20px;
+	}
+
+	h6 {
+		font-size: 12px;
+		/*margin-top: 0.2em;*/
+		text-align: right;
+	}
+
+	hr {
+		margin-top: 0.1em;
+	}
+
+	.comentario h1 {
+		font-family: 'Open Sans';
+	    font-size: 16px;
+	}
+
+	.comentario h2 {
+		font-family: 'Open Sans';
+		font-size: 15px;
+	    font-weight: 400;
+	    color: green;
+	    /*margin-bottom: 20px;*/
+	    text-align: right;
+	    /*background-color: #f00;*/
+	}		
+}
+
+@media (min-width: 1200px) {
+
+	body {
+    	margin-left: auto;
+    	margin-right: auto;
+    	width: 40%;
+    }
+
+	h1 {
+		font-family: 'Open Sans';
+	    font-size: 40px;
+	    font-weight: 600;    
+	    margin-top: 20px;
+	}
+
+	h2 {
+		font-family: 'OpenSans-Light';
+	    font-size: 22px;
+	    font-style: italic;
+	    margin-top: 20px;
+	}	
+
+	h3 {
+		font-family: 'Open Sans';
+		font-size: 15px;
+	    font-weight: 400;
+	    color: green;
+	    margin-top: 20px;
+	}
+
+	h4 {
+		font-family: 'Open Sans';
+		font-size: 20px;
+	    font-weight: 200;
+	    line-height: 200%;
+	    margin-top: 20px;
+	}
+
+	h6 {
+		font-size: 12px;
+		margin-top: 0em;
+		padding-top: 0em;
+		text-align: right;
+	}
+
+	hr {
+		margin-top: 0.1em;
+	}
+
+	.comentario h1 {
+		font-family: 'Open Sans';
+	    font-size: 16px;
+	}
+
+	.comentario h2 {
+		font-family: 'Open Sans';
+		font-size: 15px;
+	    font-weight: 400;
+	    color: green;
+	    /*margin-bottom: 20px;*/
+	    text-align: right;
+	    /*background-color: #f00;*/
+	}	
+}
+
+
+
+a:link, a:visited {
+	color: #1a7a14;
+}
+a:hover {
+	color: #b6e3b2;
+    text-decoration: none;
+}
+
+.titulo_cabecera {
+	font: 1em "OpenSans-Light", Sans;
+	font-size: 60px;
+	text-align: center;
+	font-style: italic;
+}
+
+.bloque_cabecera {
+	background-color: #c4f7c0;
+}
+
+footer {
+	background-color: #bae2b8;
+}
+
+footer h5 {
+	font-family: 'Open Sans';
+	font-size: 15px;
+	font-weight: 600;
+	color: green;	
+}
+
+footer {
+	font: 1em "OpenSans-Light", Sans;
+	font-size: 15px;
+	font-style: italic;	
+	
+	margin: 0;
+	padding: 0;
+}
+
+footer hr {
+	margin:0;
+	padding:0;
+}
+
+footer .row {
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.form-group label {
+	display:none;
+}
+
+.form-group ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.form-group li {
+	font-style: italic;	
+	color: red;
+}
+
+.mensaje_error {
+	font: 1em "OpenSans-Light", Sans;
+	font-size: 30px;
+	font-style: italic;	
+	background-color: red;
+	color: white;
+}
+
+.mensaje_enviado {
+	font: 1em "OpenSans-Light", Sans;
+	font-size: 30px;
+	font-style: italic;	
+	background-color: green;
+	color:white;
+}

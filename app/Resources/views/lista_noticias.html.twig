@@ -1,0 +1,29 @@
+{% for noticia in noticias %}
+
+	<hr>
+
+	<div class="container-fluid">
+       	
+       	{% if noticia.tipoMedia %}
+       		<img class="img-fluid" src="{{noticia.media}}" alt="Card image cap">
+       	{% else %}
+       		<div class="embed-responsive embed-responsive-16by9">
+       			<iframe class="embed-responsive-item" src="{{noticia.media}}" frameborder="0" allowfullscreen></iframe>
+       		</div>
+		{% endif %}
+		
+
+		<div class="alert alert-success">
+			<h6>Fuente: {{noticia.fuente}}</h6>
+			<hr>
+			<h1><a href="{{ path('noticia_completa', {
+				'desc_categoria': categoria.descripcion,
+				'id_noticia': noticia.id
+			}) }}">{{noticia.titular}}</a></h1>
+			<h2>{{noticia.clave | nl2br }}</h2>
+			<h3>{{noticia.autor ~ ' ' ~ noticia.fecha | date("m/d/Y H:i") ~ 'h' }}</h3>
+		</div>
+	</div>
+{% endfor %}
+
+<hr>

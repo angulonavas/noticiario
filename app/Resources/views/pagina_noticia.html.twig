@@ -1,0 +1,44 @@
+{% extends 'raiz.html.twig' %}
+
+{% block cuerpo %}
+	<div>
+        {% if noticia.tipoMedia %}
+            <img class="img-fluid" src="{{noticia.media}}" alt="Card image cap">
+        {% else %}
+            <div class="embed-responsive embed-responsive-16by9">
+                <iframe class="embed-responsive-item" src="{{noticia.media}}" frameborder="0" allowfullscreen></iframe>
+            </div>
+        {% endif %}
+
+        <h6>Fuente: {{noticia.fuente}}</h6>
+        <hr>
+
+		<h1>{{noticia.titular}}</h1>
+		<h2>{{noticia.clave | nl2br}}</h2>
+		<h3>{{noticia.autor ~ ' ' ~ noticia.fecha | date("m/d/Y H:i") ~ 'h' }}</h3>
+		<h4>{{noticia.cuerpo | nl2br}}</h4>
+	</div>
+
+    <div class="alert alert-dark" role="alert">
+        Comentarios
+    </div>
+
+    <div>
+        {% include('lista_comentarios.html.twig') %}
+    </div>	
+
+    <div class="alert alert-dark" role="alert">
+        Comenta la noticia libremente
+    </div>
+
+    <div>
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+        <div class="form-group">{{ form_row(form.pseudonimo) }}</div>
+        <div class="form-group">{{ form_row(form.email) }}</div>
+        <div class="form-group">{{ form_row(form.descripcion) }}</div>
+        <div class="form-group">{{ form_row(form.enviar) }}</div>
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}

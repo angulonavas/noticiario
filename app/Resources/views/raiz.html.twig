@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('anuncios/css/estilos.css') }}" type="text/css">
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+    {#<link rel="stylesheet" href="{{ asset('images/iconos/fontawesome/web-fonts-with-css/css/fontawesome.min.css') }}">#}
+
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+        <div>
+            {% include('cabecera.html.twig') %}
+        </div>
+
+        {% if mensaje_formulario is defined %}    
+            {% if mensaje_formulario.estado == 'error' %}
+                <div class="mensaje_error">
+                    {{ mensaje_formulario.descripcion }}
+                </div>
+            {% elseif mensaje_formulario.estado == 'ok' %}
+                <div class="mensaje_enviado">
+                    {{ mensaje_formulario.descripcion }}
+                </div>
+            {% endif %}                
+        {% endif %}
+
+        <div>
+            {% include('menu.html.twig') %}
+        </div>
+
+        {% block cuerpo %}{% endblock %}
+
+        <div class="row">
+            <div class="col">
+                {% include('pie.html.twig') %}
+            </div>
+        </div>
+
+        {% block javascripts %}
+            {{ parent() }}
+            
+            {# 
+                A continuación todos los scripts para el tablón de anuncios.
+                Debido a que no se puede hacer heredable anuncios.html.twig, sólo se puede poner aquí
+                si se quiere que los scripts vayan siempre al final del documento. Si no nos importa
+                que los scripts vayan dentro del documento se puede poner el código de abajo dentro de
+                la plantilla anuncios.html.twig
+            #}
+            <script src="{{ asset('base/js/jquery-3.3.1.js') }}"></script>
+            <script type="text/javascript">
+                var $jQuery_3_3_1 = jQuery.noConflict();
+                window.jQuery = $jQuery_3_3_1;
+            </script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" 
+                crossorigin="anonymous"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+            <script src="{{ asset('/anuncios/js/jquery.innerfade.js') }}"></script>
+            <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
+        
+            <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+            
+            <script type='text/javascript'>
+                $jQuery_3_3_1(document).ready(
+                    function(){
+                    
+                        window.cookieconsent.initialise({
+                            "palette": {
+                                "popup": {
+                                    "background": "#000"
+                                },
+                                "button": {
+                                    "background": "transparent",
+                                    "text": "#f1d600",
+                                    "border": "#f1d600"
+                                }
+                            },
+                            "position": "bottom-left",
+                            "content": {
+                                "message": "Hola, las leyes nos obligan a molestarte con este mensaje de aceptación de cookies. La ley te obliga a hacer clic en aceptar para que puedas disfrutar de todas las funcionalidades de la web. Por otra parte, nosotros nunca compartiremos tus datos con terceros. Aprovechamos para darte un cordial saludo.",
+                                "dismiss": "Aceptar",
+                                "link": "Leer más",
+                                "href": "http://politicadecookies.com/"
+                            }
+                        });
+                    }
+                );
+            </script>
+            {# fin del código script para control del tablón de anuncios #}
+
+        {% endblock %}
+
+    </div>
+
+{% endblock %}
