@@ -20,5 +20,3 @@ class UsuarioController extends Controller {
         return $this->render('@Seguridad/Default/index.html.twig', []);
     }
 }
-
-?>
