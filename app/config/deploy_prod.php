@@ -9,7 +9,7 @@ return new class extends DefaultDeployer
         return $this->getConfigBuilder()
             ->useSshAgentForwarding(true)
             // SSH connection string to connect to the remote server (format: user@host-or-IP:port-number)
-            ->server('root@185.166.213.170')
+            ->server('root@185.166.213.240')
             // the absolute path of the remote server directory where the project is deployed
             ->deployDir('/var/www/html/noticiario')
             // the URL of the Git repository where the project code is hosted
