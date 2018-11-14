@@ -87,7 +87,7 @@ class NoticiaController extends Controller {
      */
     public function raizAction(Request $request) {
 
-        $desc_categoria = 'España';
+        $desc_categoria = 'Política';
         return $this->listarNoticiasAction($request, $desc_categoria);
     }
 

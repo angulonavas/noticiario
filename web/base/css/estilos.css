@@ -8,10 +8,18 @@ body {
 	font-size: 20px;
 }
 
+/* diseño para móviles */
 @media (min-width: 1px) {
 
 	body {
 		margin: auto;
+	}
+
+	.titulo_cabecera {
+		font: 1em "OpenSans-Light", Sans;
+		font-size: 30px;
+		text-align: center;
+		font-style: italic;
 	}
 
 	h1 {
@@ -66,6 +74,7 @@ body {
 	}		
 }
 
+/* diseño para webs */
 @media (min-width: 1200px) {
 
 	body {
@@ -73,6 +82,13 @@ body {
     	margin-right: auto;
     	width: 40%;
     }
+
+	.titulo_cabecera {
+		font: 1em "OpenSans-Light", Sans;
+		font-size: 50px;
+		text-align: center;
+		font-style: italic;
+	}
 
 	h1 {
 		font-family: 'Open Sans';
@@ -139,13 +155,6 @@ a:link, a:visited {
 a:hover {
 	color: #b6e3b2;
     text-decoration: none;
-}
-
-.titulo_cabecera {
-	font: 1em "OpenSans-Light", Sans;
-	font-size: 60px;
-	text-align: center;
-	font-style: italic;
 }
 
 .bloque_cabecera {
