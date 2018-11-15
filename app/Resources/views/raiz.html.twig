@@ -85,54 +85,7 @@
                         });
 
                     }
-                );
-
-                function cargarNoticias2() {                  
-                    $jQuery_3_3_1.post("{{ url('cargar_pagina2') }}", 
-                        { 'name': "John", 'time': "2pm" })
-                        .done(function( data ) {
-                            num_pagina = JSON.parse(data.num_pagina); 
-                            alert( "Data Loaded: " + num_pagina );
-                        });
-                }
-
-                function cargarNoticias() {
-
-                    var num_pag = $jQuery_3_3_1('#num_pagina').val(); // página actual
-                    var ruta = "{{ path('cargar_pagina', {'desc_categoria': categoria.descripcion, num_pagina:'num_pag'}) }}";
-                    ruta = ruta.replace("num_pag", num_pag);
-
-                    $jQuery_3_3_1.ajax({
-                        method: "GET",
-                        url: ruta,
-                        dataType: 'json',
-                        success: function(data) {
-
-                            if (/^[\],:{}\s]*$/.test(data.noticias.replace(/\\["\\\/bfnrtu]/g, '@').
-                                replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
-                                replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {                                
-                                noticias = JSON.parse(data.noticias); 
-                                $('#num_pagina').val(data.num_pagina);
-                            }
-
-                            $.each(noticias, $.proxy(function(i, noticia) {
-                               // alert(noticia.titular);
-
-                                html = '<div class="container-fluid">';
-                                html += '<div class="alert alert-success">';
-                                html += '<h1>'+noticia.titular+'</h1>';
-                                html += '</div></div>';
-                                $("#lista_noticias").append(html);
-                            
-                            }, this)); 
-                        },
-                        error: function(jqXHR, exception) {
-                            if(jqXHR.status === 405) {
-                                console.error("METHOD NOT ALLOWED!");
-                            }
-                        }
-                    });
-                }                    
+                );                 
 
             </script>
             {# fin del código script para control del tablón de anuncios #}

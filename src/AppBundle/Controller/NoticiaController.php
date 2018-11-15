@@ -6,6 +6,7 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -24,7 +25,7 @@ use AppBundle\Form\ComentarioType;
 
 class NoticiaController extends Controller {
 
-    private $noticias_por_pagina = 1;
+    private $noticias_por_pagina = 5;
 
 	// método público que se ejecuta cada vez que un usuario entra
     public function registrarVisitaAction(Request $request) {
@@ -83,23 +84,15 @@ class NoticiaController extends Controller {
         return ($visitante_nuevo) ? false : true;
     }
 
-    /**
-     * es un servicio web que devuelve N noticias siguiente a $ultima_noticia:
-     * @Route("/", name="cargar_pagina2")
-     */     
-    public function cargarMasNoticias2Action() {
-        $request = Request::createFromGlobals();
-        $data = json_decode($request->getContent(), true);
-        //$data = $request->request->get('request');
-        //$data = 11;
 
-            $response = new JsonResponse();
-            $response->setStatusCode(200);
-            $response->setData(array(
-                'response' => 'success',
-                'num_pagina' => $data,
-            ));
-            return $response;        
+    // normalizar las fechas de las noticias para poderlas serializar para ajax
+    private function normalizarFechas($noticias) {
+
+        foreach($noticias as $noticia) {
+            $noticia->setFecha($noticia->getFecha()->format('Y/m/d H:i'));
+        }
+
+        return $noticias;
     }
 
 
@@ -120,7 +113,8 @@ class NoticiaController extends Controller {
  
             $categoria = $this->getDoctrine()->getManager()->getRepository(Categoria::class)->buscarDescripcion($desc_categoria);
             $noticias = $this->getDoctrine()->getManager()->getRepository(Noticia::class)->buscarListaN($categoria, $offset, $this->noticias_por_pagina);
-            //$categorias = $this->getDoctrine()->getManager()->getRepository(Categoria::class)->buscarLista();
+            
+            $noticias = $this->normalizarFechas($noticias);
 
             $response = new JsonResponse();
             $response->setStatusCode(200);
@@ -232,7 +226,7 @@ class NoticiaController extends Controller {
         $existeCookie = $this->registrarVisitaAction($request);
 
         $categoria = $this->getDoctrine()->getManager()->getRepository(Categoria::class)->buscarDescripcion($desc_categoria);
-        $noticias = $this->getDoctrine()->getManager()->getRepository(Noticia::class)->buscarListaN($categoria, 0, 1);
+        $noticias = $this->getDoctrine()->getManager()->getRepository(Noticia::class)->buscarListaN($categoria, 0, $this->noticias_por_pagina);
         $categorias = $this->getDoctrine()->getManager()->getRepository(Categoria::class)->buscarLista();
 
         $response = $this->render('pagina_lista_noticias.html.twig', [

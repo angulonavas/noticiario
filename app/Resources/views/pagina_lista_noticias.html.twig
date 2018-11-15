@@ -19,3 +19,65 @@
     <hr>
 
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+        <script type='text/javascript'>
+            function cargarNoticias() {
+
+            var num_pag = $jQuery_3_3_1('#num_pagina').val(); // página actual
+            var ruta = "{{ path('cargar_pagina', {'desc_categoria': categoria.descripcion, num_pagina:'num_pag'}) }}";
+            ruta = ruta.replace("num_pag", num_pag);
+
+            $jQuery_3_3_1.ajax({
+                method: "GET",
+                url: ruta,
+                dataType: 'json',
+                success: function(data) {
+
+                    if (/^[\],:{}\s]*$/.test(data.noticias.replace(/\\["\\\/bfnrtu]/g, '@').
+                        replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
+                        replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {                                
+                        noticias = JSON.parse(data.noticias); 
+                        $('#num_pagina').val(data.num_pagina);
+                    }
+
+
+                    $.each(noticias, $.proxy(function(i, noticia) {
+                       
+                       var fecha = new Date(noticia.fecha);
+                       var minutos = (fecha.getMinutes()< 10) ? '0'+fecha.getMinutes() : fecha.getMinutes();
+                       var fecha = fecha.getDate()+'/'+fecha.getMonth()+'/'+fecha.getFullYear()+' '+fecha.getHours()+':'+minutos+'h';
+                       var ruta = "{{ path('noticia_completa', {'desc_categoria': categoria.descripcion, 'titular_noticia': 'noticia_titular'}) }}";
+                       ruta = ruta.replace("noticia_titular", noticia.titular);
+                       ruta = ruta.replace(new RegExp(' ', 'g'), '-');
+                        html = '<div class="container-fluid">';
+
+                        if (noticia.tipoMedia) {
+                            html += '<img class="img-fluid" src="'+noticia.media+'" alt="Card image cap">';
+                        } else {
+                            html += '<div class="embed-responsive embed-responsive-16by9">';
+                            html += '<iframe class="embed-responsive-item" src="'+noticia.media+'" frameborder="0" allowfullscreen></iframe></div>';
+                        }
+                        html += '<div class="alert alert-success">';
+                        html += '<h1><a href="'+ruta+'">'+noticia.titular+'</a></h1>';
+                        html += '<h2>'+noticia.clave.replace(/(\r\n|\n\r|\r|\n)/g, "<br>")+'</h2>';
+                        html += '<h3>'+noticia.autor+' '+fecha+'</h3>';
+                        html += '</div></div><hr>';
+
+                        $("#lista_noticias").append(html);
+                    
+                    }, this)); 
+                },
+                error: function(jqXHR, exception) {
+                    if(jqXHR.status === 405) {
+                        console.error("METHOD NOT ALLOWED!");
+                    }
+                }
+            });
+            }   
+
+        </script>
+
+{% endblock %}
