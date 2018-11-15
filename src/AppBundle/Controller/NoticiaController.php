@@ -25,7 +25,6 @@ use AppBundle\Form\ComentarioType;
 class NoticiaController extends Controller {
 
     private $noticias_por_pagina = 1;
-    private $num_pagina; 
 
 	// método público que se ejecuta cada vez que un usuario entra
     public function registrarVisitaAction(Request $request) {
@@ -111,8 +110,8 @@ class NoticiaController extends Controller {
      */    
     public function cargarMasNoticiasAction(Request $request, $desc_categoria, $num_pagina) {
 
-        $this->num_pagina++;                    
-        $offset = $this->num_pagina * $this->noticias_por_pagina; 
+        $offset = $num_pagina * $this->noticias_por_pagina; 
+        $num_pagina = $num_pagina+1;
 
         if($request->isXmlHttpRequest()) {
             $encoders = array(new JsonEncoder());
@@ -127,7 +126,7 @@ class NoticiaController extends Controller {
             $response->setStatusCode(200);
             $response->setData(array(
                 'response' => 'success',
-                'num_pagina' => $offset,
+                'num_pagina' => $num_pagina,
                 'noticias' => $serializer->serialize($noticias, 'json')
             ));
             return $response;

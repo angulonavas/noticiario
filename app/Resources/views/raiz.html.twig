@@ -98,9 +98,13 @@
 
                 function cargarNoticias() {
 
+                    var num_pag = $jQuery_3_3_1('#num_pagina').val(); // página actual
+                    var ruta = "{{ path('cargar_pagina', {'desc_categoria': categoria.descripcion, num_pagina:'num_pag'}) }}";
+                    ruta = ruta.replace("num_pag", num_pag);
+
                     $jQuery_3_3_1.ajax({
                         method: "GET",
-                        url: "{{ url('cargar_pagina',{desc_categoria: categoria.descripcion, num_pagina:num_pagina}) }}",
+                        url: ruta,
                         dataType: 'json',
                         success: function(data) {
 
@@ -108,6 +112,7 @@
                                 replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
                                 replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {                                
                                 noticias = JSON.parse(data.noticias); 
+                                $('#num_pagina').val(data.num_pagina);
                             }
 
                             $.each(noticias, $.proxy(function(i, noticia) {
