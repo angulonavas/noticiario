@@ -12,13 +12,12 @@
        		</div>
 		{% endif %}
 		
-
 		<div class="alert alert-success">
 			<h6>Fuente: {{noticia.fuente}}</h6>
 			<hr>
 			<h1><a href="{{ path('noticia_completa', {
 				'desc_categoria': categoria.descripcion,
-				'id_noticia': noticia.id
+				'titular_noticia': noticia.titular | formato_url
 			}) }}">{{noticia.titular}}</a></h1>
 			<h2>{{noticia.clave | nl2br }}</h2>
 			<h3>{{noticia.autor ~ ' ' ~ noticia.fecha | date("m/d/Y H:i") ~ 'h' }}</h3>

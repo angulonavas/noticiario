@@ -2,8 +2,16 @@
 
 namespace AppBundle\Controller;
 
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -15,6 +23,9 @@ use AppBundle\Entity\Visita;
 use AppBundle\Form\ComentarioType;
 
 class NoticiaController extends Controller {
+
+    private $noticias_por_pagina = 1;
+    private $num_pagina; 
 
 	// método público que se ejecuta cada vez que un usuario entra
     public function registrarVisitaAction(Request $request) {
@@ -73,13 +84,54 @@ class NoticiaController extends Controller {
         return ($visitante_nuevo) ? false : true;
     }
 
-    // es un servicio web que devuelve N noticias siguiente a $ultima_noticia
-    public function cargarMasNoticiasAction(Request $request, $desc_categoria, $ultima_noticia) {
-        
-        $categoria = $this->getDoctrine()->getManager()->getRepository(Categoria::class)->buscarDescripcion($desc_categoria);
-        $noticias = $this->getDoctrine()->getManager()->getRepository(Noticia::class)->buscarListaN($categoria, $ultima_noticia, 3);
+    /**
+     * es un servicio web que devuelve N noticias siguiente a $ultima_noticia:
+     * @Route("/", name="cargar_pagina2")
+     */     
+    public function cargarMasNoticias2Action() {
+        $request = Request::createFromGlobals();
+        $data = json_decode($request->getContent(), true);
+        //$data = $request->request->get('request');
+        //$data = 11;
 
-        // return --> json con las noticias
+            $response = new JsonResponse();
+            $response->setStatusCode(200);
+            $response->setData(array(
+                'response' => 'success',
+                'num_pagina' => $data,
+            ));
+            return $response;        
+    }
+
+
+    /**
+     * es un servicio web que devuelve N noticias siguiente a $ultima_noticia:
+     * @Route("/{desc_categoria}/pagina/{num_pagina}", name="cargar_pagina")
+     * @Method({"GET"})
+     */    
+    public function cargarMasNoticiasAction(Request $request, $desc_categoria, $num_pagina) {
+
+        $this->num_pagina++;                    
+        $offset = $this->num_pagina * $this->noticias_por_pagina; 
+
+        if($request->isXmlHttpRequest()) {
+            $encoders = array(new JsonEncoder());
+            $normalizers = array(new ObjectNormalizer());
+            $serializer = new Serializer($normalizers, $encoders);
+ 
+            $categoria = $this->getDoctrine()->getManager()->getRepository(Categoria::class)->buscarDescripcion($desc_categoria);
+            $noticias = $this->getDoctrine()->getManager()->getRepository(Noticia::class)->buscarListaN($categoria, $offset, $this->noticias_por_pagina);
+            //$categorias = $this->getDoctrine()->getManager()->getRepository(Categoria::class)->buscarLista();
+
+            $response = new JsonResponse();
+            $response->setStatusCode(200);
+            $response->setData(array(
+                'response' => 'success',
+                'num_pagina' => $offset,
+                'noticias' => $serializer->serialize($noticias, 'json')
+            ));
+            return $response;
+        }        
     }      
 
     /**
@@ -92,15 +144,16 @@ class NoticiaController extends Controller {
     }
 
     /**
-     * @Route("/{desc_categoria}/{id_noticia}", name="noticia_completa")
+     * @Route("/{desc_categoria}/{titular_noticia}", name="noticia_completa")
      */
-    public function buscarNoticiaAction(Request $request, $id_noticia, $desc_categoria) {
+    public function buscarNoticiaAction(Request $request, $titular_noticia, $desc_categoria) {
 
         $existeCookie = $this->registrarVisitaAction($request);
 
+        $titular_noticia = str_replace("-", " ", $titular_noticia);
         $categoria = $this->getDoctrine()->getManager()->getRepository(Categoria::class)->buscarDescripcion($desc_categoria);
-        $noticia = $this->getDoctrine()->getManager()->getRepository(Noticia::class)->buscar($id_noticia);
-        $comentarios = $this->getDoctrine()->getManager()->getRepository(Comentario::class)->buscarListaN($noticia, 0, 3);
+        $noticia = $this->getDoctrine()->getManager()->getRepository(Noticia::class)->buscarTitular($titular_noticia);
+        $comentarios = $this->getDoctrine()->getManager()->getRepository(Comentario::class)->buscarListaN($noticia, 0, 2);
         $categorias = $this->getDoctrine()->getManager()->getRepository(Categoria::class)->buscarLista();
  
         // creamos el comentario nuevo
@@ -166,6 +219,13 @@ class NoticiaController extends Controller {
     }
 
     /**
+     * @Route("/politica-cookies", name="politica_cookies")
+     */
+    public function politicaCookiesAction(Request $request) {
+        return $this->render('politica_cookies.html.twig', []);
+    }    
+
+    /**
      * @Route("/{desc_categoria}", name="categoria_lista")
      */
     public function listarNoticiasAction(Request $request, $desc_categoria) {
@@ -173,13 +233,14 @@ class NoticiaController extends Controller {
         $existeCookie = $this->registrarVisitaAction($request);
 
         $categoria = $this->getDoctrine()->getManager()->getRepository(Categoria::class)->buscarDescripcion($desc_categoria);
-        $noticias = $this->getDoctrine()->getManager()->getRepository(Noticia::class)->buscarListaN($categoria, 0, 3);
+        $noticias = $this->getDoctrine()->getManager()->getRepository(Noticia::class)->buscarListaN($categoria, 0, 1);
         $categorias = $this->getDoctrine()->getManager()->getRepository(Categoria::class)->buscarLista();
 
         $response = $this->render('pagina_lista_noticias.html.twig', [
             'categoria' => $categoria,
             'noticias' => $noticias,
-            'categorias' => $categorias
+            'categorias' => $categorias,
+            'num_pagina' => 1
         ]);
 
         // si no existe la cookie de visita se añade

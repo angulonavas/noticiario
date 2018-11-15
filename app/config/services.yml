@@ -33,3 +33,9 @@ services:
     # AppBundle\Service\ExampleService:
     #     arguments:
     #         $someArgument: 'some_value'
+
+    app.twig_runtime: 
+        class: AppBundle\Twig\AppRuntime 
+        public: false 
+        tags: 
+        - { name: twig.runtime }

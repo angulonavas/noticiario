@@ -57,9 +57,7 @@
             <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" 
                 crossorigin="anonymous"></script>
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-            <script src="{{ asset('/anuncios/js/jquery.innerfade.js') }}"></script>
             <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
-        
             <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
             
             <script type='text/javascript'>
@@ -79,14 +77,58 @@
                             },
                             "position": "bottom-left",
                             "content": {
-                                "message": "Hola, las leyes nos obligan a molestarte con este mensaje de aceptación de cookies. La ley te obliga a hacer clic en aceptar para que puedas disfrutar de todas las funcionalidades de la web. Por otra parte, nosotros nunca compartiremos tus datos con terceros. Aprovechamos para darte un cordial saludo.",
+                                "message": "Hola. Utilizamos cookies. Nosotros no compartimos tus datos con terceros. Aprovechamos para darte un cordial saludo.",
                                 "dismiss": "Aceptar",
                                 "link": "Leer más",
-                                "href": "http://politicadecookies.com/"
+                                "href": "politica-cookies"
                             }
                         });
+
                     }
                 );
+
+                function cargarNoticias2() {                  
+                    $jQuery_3_3_1.post("{{ url('cargar_pagina2') }}", 
+                        { 'name': "John", 'time': "2pm" })
+                        .done(function( data ) {
+                            num_pagina = JSON.parse(data.num_pagina); 
+                            alert( "Data Loaded: " + num_pagina );
+                        });
+                }
+
+                function cargarNoticias() {
+
+                    $jQuery_3_3_1.ajax({
+                        method: "GET",
+                        url: "{{ url('cargar_pagina',{desc_categoria: categoria.descripcion, num_pagina:num_pagina}) }}",
+                        dataType: 'json',
+                        success: function(data) {
+
+                            if (/^[\],:{}\s]*$/.test(data.noticias.replace(/\\["\\\/bfnrtu]/g, '@').
+                                replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
+                                replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {                                
+                                noticias = JSON.parse(data.noticias); 
+                            }
+
+                            $.each(noticias, $.proxy(function(i, noticia) {
+                               // alert(noticia.titular);
+
+                                html = '<div class="container-fluid">';
+                                html += '<div class="alert alert-success">';
+                                html += '<h1>'+noticia.titular+'</h1>';
+                                html += '</div></div>';
+                                $("#lista_noticias").append(html);
+                            
+                            }, this)); 
+                        },
+                        error: function(jqXHR, exception) {
+                            if(jqXHR.status === 405) {
+                                console.error("METHOD NOT ALLOWED!");
+                            }
+                        }
+                    });
+                }                    
+
             </script>
             {# fin del código script para control del tablón de anuncios #}
 

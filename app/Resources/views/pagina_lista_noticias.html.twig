@@ -1,7 +1,21 @@
 {% extends 'raiz.html.twig' %}
 
+{% block meta %} 
+	<meta name="description" content="{{categoria.descripcion}} entre la noticia y la opinión"> 
+	<meta name="keywords" content="minimalismo, minimalista, sencillez, opinión, opiniones, noticias, autosuficiencia">
+{% endblock %}
+{% block title %}Desde otra lógica - Noticias de {{categoria.descripcion}} creadas desde otra filosofía {% endblock %}	
+
 {% block cuerpo %}
-    <div>
+    <div id="lista_noticias">
         {% include('lista_noticias.html.twig') %}
     </div>	
+
+    <div>
+		<input type="hidden" id="num_pagina" name="num_pagina" value="{{num_pagina}}">
+    	<button type="button" class="btn btn-primary btn-lg btn-block" onClick="cargarNoticias();">Mostrar más</button>
+    </div>
+
+    <hr>
+
 {% endblock %}
