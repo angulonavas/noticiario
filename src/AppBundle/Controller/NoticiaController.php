@@ -145,9 +145,9 @@ class NoticiaController extends Controller {
 
         $existeCookie = $this->registrarVisitaAction($request);
 
-        $titular_noticia = str_replace("-", " ", $titular_noticia);
+        $titular = str_replace("-", " ", $titular_noticia);
         $categoria = $this->getDoctrine()->getManager()->getRepository(Categoria::class)->buscarDescripcion($desc_categoria);
-        $noticia = $this->getDoctrine()->getManager()->getRepository(Noticia::class)->buscarTitular($titular_noticia);
+        $noticia = $this->getDoctrine()->getManager()->getRepository(Noticia::class)->buscarTitular($titular);
         $comentarios = $this->getDoctrine()->getManager()->getRepository(Comentario::class)->buscarListaN($noticia, 0, $this->comentarios_por_pagina);
         $categorias = $this->getDoctrine()->getManager()->getRepository(Categoria::class)->buscarLista();
  
@@ -178,11 +178,24 @@ class NoticiaController extends Controller {
             $em->persist($comentario);            
             $em->flush();
 
+            // vaciamos el formulario
+            unset($comentario);
+            unset($form);
+            $comentario = new Comentario();
+            $form = $this->createForm(ComentarioType::class, $comentario);
+
+            // preparamos el mensaje de envío correcto
             $mensaje['estado'] = 'ok';
             $mensaje['descripcion'] = 'El comentario ha sido enviado con éxito!';
 
             // volvemos a cargar los comentarios
-            $comentarios = $this->getDoctrine()->getManager()->getRepository(Comentario::class)->buscarListaN($noticia, 0, 3);
+            $comentarios = $this->getDoctrine()->getManager()->getRepository(Comentario::class)->buscarListaN($noticia, 0, $this->comentarios_por_pagina);
+
+            // redireccionando a la siguiente ruta para evitar resubmit, duplicados en la BD. (Patrón PRG)
+            return $this->redirectToRoute('noticia_completa', [
+                'titular_noticia' => $titular_noticia,
+                'desc_categoria' => $desc_categoria
+            ]);
 
         } else if ($form->isSubmitted() && !$form->isValid()) {
             $mensaje['estado'] = 'error';
