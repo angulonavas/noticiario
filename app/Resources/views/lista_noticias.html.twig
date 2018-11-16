@@ -20,7 +20,7 @@
 				'titular_noticia': noticia.titular | formato_url
 			}) }}">{{noticia.titular}}</a></h1>
 			<h2>{{noticia.clave | nl2br }}</h2>
-			<h3>{{noticia.autor ~ ' ' ~ noticia.fecha | date("m/d/Y H:i") ~ 'h' }}</h3>
+			<h3>{{noticia.autor ~ ' ' ~ noticia.fecha | date("d/m/Y H:i") ~ 'h' }}</h3>
 		</div>
 	</div>
 {% endfor %}

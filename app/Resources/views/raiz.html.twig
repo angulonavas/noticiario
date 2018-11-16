@@ -85,7 +85,20 @@
                         });
 
                     }
-                );                 
+                );   
+
+                // Esta función formatea una fecha que viene en formato json
+                function formatearFecha(fecha) {
+                    var fecha = new Date(fecha);
+                    var dia = (fecha.getDate()< 10) ? '0'+fecha.getDate() : fecha.getDate();
+                    var mes = fecha.getMonth()+1;
+                    mes = (mes < 10) ? '0'+mes : mes;
+                    var horas = (fecha.getHours()< 10) ? '0'+fecha.getHours() : fecha.getHours();
+                    var minutos = (fecha.getMinutes()< 10) ? '0'+fecha.getMinutes() : fecha.getMinutes();
+                    var fecha = dia+'/'+mes+'/'+fecha.getFullYear()+' '+horas+':'+minutos+'h';
+
+                    return fecha;
+                }
 
             </script>
             {# fin del código script para control del tablón de anuncios #}

@@ -26,9 +26,17 @@
         Comentarios
     </div>
 
-    <div>
+    <div id="lista_comentarios">
         {% include('lista_comentarios.html.twig') %}
     </div>	
+
+    <!-- Bloque para la llamada ajax -->
+    <div>
+        <input type="hidden" id="num_pagina" name="num_pagina" value="{{num_pagina}}">
+        <button type="button" class="btn btn-primary btn-lg btn-block" onClick="cargarComentarios();">Mostrar más</button>
+    </div>
+
+    <hr>
 
     <div class="alert alert-dark" role="alert">
         Comenta la noticia libremente
@@ -37,11 +45,78 @@
     <div>
         {{ form_start(form) }}
         {{ form_errors(form) }}
-        <div class="form-group">{{ form_row(form.pseudonimo) }}</div>
+        <div class="form-group">
+            <div class="input-group mb-2 mr-sm-2">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">@</div>
+                </div>
+                {{ form_row(form.pseudonimo) }}
+            </div>
+        </div>
         <div class="form-group">{{ form_row(form.email) }}</div>
         <div class="form-group">{{ form_row(form.descripcion) }}</div>
         <div class="form-group">{{ form_row(form.enviar) }}</div>
         {{ form_end(form) }}
     </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+        <script type='text/javascript'>
+            function cargarComentarios() {
+
+            // obtenemos la página actual real. la dinámicamente obtenida tras sucesivas llamadas ajax
+            var num_pag = $jQuery_3_3_1('#num_pagina').val();
+
+            // obtenemos la ruta dinámica al servicio web
+            var ruta = "{{ path('cargar_mas_comentarios', {'desc_categoria': categoria.descripcion, 'titular_noticia': noticia.titular, num_pagina:'num_pag'}) }}";
+            
+            // sustituimos el num_pagina estático por el dinámico
+            ruta = ruta.replace("num_pag", num_pag);
+            ruta = ruta.replace(new RegExp(' ', 'g'), '-');
+
+            // abrimos la función ajax con la versión jquery que estamos utilizando
+            $jQuery_3_3_1.ajax({
+                method: "GET",
+                url: ruta,
+                dataType: 'json',
+                success: function(data) {
+
+                    // obtenemos el vector de comentarios de la serialización json                              
+                    comentarios = JSON.parse(data.comentarios); 
+
+                    // actualizamos el número de página de comentarios
+                    $('#num_pagina').val(data.num_pagina);
+
+                    // vamos s recorrer cada comentario para insertarlos en el DOM de la web
+                    $.each(comentarios, $.proxy(function(i, comentario) {
+
+                        // formateando la información que se va a mostrar
+                        var pseudonimo = comentario.pseudonimo.replace(new RegExp('@', 'g'), '');
+                        var fecha = formatearFecha(comentario.fecha)
+
+                        // creamos el html para actualizar el dom                       
+                        html = '<div class="comentario alert alert-info">';
+                        html += '<h1>'+comentario.descripcion+'</h1>';
+                        html += '<hr>';
+                        html += '<h2 class="mb-0">@'+pseudonimo+' '+fecha+'</h2>';
+                        html += '</div>';
+
+                        // añadimos el código html creado a la lista de comentarios
+                        $("#lista_comentarios").append(html);
+                    
+                    }, this)); 
+                },
+                error: function(jqXHR, exception) {
+                    if(jqXHR.status === 405) {
+                        console.error("METHOD NOT ALLOWED!");
+                    }
+                }
+            });
+            }   
+
+        </script>
 
 {% endblock %}

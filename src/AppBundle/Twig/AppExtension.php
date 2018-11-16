@@ -10,6 +10,7 @@ class AppExtension extends \Twig_Extension {
         
         return array(        
             new \Twig_SimpleFilter('formato_url', array(AppRuntime::class, 'formatear_urlFilter')),
+            new \Twig_SimpleFilter('formato_pseudonimo', array(AppRuntime::class, 'formatear_pseudonimoFilter')),
         );
     }
 }

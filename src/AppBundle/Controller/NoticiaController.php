@@ -26,6 +26,7 @@ use AppBundle\Form\ComentarioType;
 class NoticiaController extends Controller {
 
     private $noticias_por_pagina = 5;
+    private $comentarios_por_pagina = 10;
 
 	// método público que se ejecuta cada vez que un usuario entra
     public function registrarVisitaAction(Request $request) {
@@ -85,14 +86,14 @@ class NoticiaController extends Controller {
     }
 
 
-    // normalizar las fechas de las noticias para poderlas serializar para ajax
-    private function normalizarFechas($noticias) {
+    // normalizar las fechas de los objetos para poderlas serializar para ajax
+    private function normalizarFechas($objetos) {
 
-        foreach($noticias as $noticia) {
-            $noticia->setFecha($noticia->getFecha()->format('Y/m/d H:i'));
+        foreach($objetos as $objeto) {
+            $objeto->setFecha($objeto->getFecha()->format('Y/m/d H:i'));
         }
 
-        return $noticias;
+        return $objetos;
     }
 
 
@@ -124,7 +125,8 @@ class NoticiaController extends Controller {
                 'noticias' => $serializer->serialize($noticias, 'json')
             ));
             return $response;
-        }        
+        
+        } else return new JsonResponse(null, 405);       
     }      
 
     /**
@@ -146,7 +148,7 @@ class NoticiaController extends Controller {
         $titular_noticia = str_replace("-", " ", $titular_noticia);
         $categoria = $this->getDoctrine()->getManager()->getRepository(Categoria::class)->buscarDescripcion($desc_categoria);
         $noticia = $this->getDoctrine()->getManager()->getRepository(Noticia::class)->buscarTitular($titular_noticia);
-        $comentarios = $this->getDoctrine()->getManager()->getRepository(Comentario::class)->buscarListaN($noticia, 0, 2);
+        $comentarios = $this->getDoctrine()->getManager()->getRepository(Comentario::class)->buscarListaN($noticia, 0, $this->comentarios_por_pagina);
         $categorias = $this->getDoctrine()->getManager()->getRepository(Categoria::class)->buscarLista();
  
         // creamos el comentario nuevo
@@ -191,6 +193,7 @@ class NoticiaController extends Controller {
             'categoria' => $categoria,
             'noticia' => $noticia,
             'comentarios' => $comentarios,
+            'num_pagina' => 1,
             'form' => $form->createView(),
             'categorias' => $categorias,
             'mensaje_formulario' => $mensaje
@@ -203,6 +206,49 @@ class NoticiaController extends Controller {
         // enviamos finalmente el response para que se cree la cookie
         return $response;
     }
+
+    /**
+     * es un servicio web que devuelve N comentarios de la página siguiente:
+     * @Route("/{desc_categoria}/{titular_noticia}/{num_pagina}", name="cargar_mas_comentarios")
+     * @Method({"GET"})
+     */    
+    public function cargarMasComentariosAction(Request $request, $desc_categoria, $titular_noticia, $num_pagina) {
+
+        // calculamos el offset para pasar al gestor de la BD
+        $offset = $num_pagina * $this->comentarios_por_pagina; 
+        
+        // incrementamos la página en una unidad
+        $num_pagina = $num_pagina+1;
+
+        // si la llamada es efectivamente por ajax...
+        if($request->isXmlHttpRequest()) {
+
+            // creamos los serializadores necesarios
+            $encoders = array(new JsonEncoder());
+            $normalizers = array(new ObjectNormalizer());
+            $serializer = new Serializer($normalizers, $encoders);
+ 
+            // obtenemos el listado de comentarios de la página buscada
+            $titular_noticia = str_replace("-", " ", $titular_noticia);
+            $categoria = $this->getDoctrine()->getManager()->getRepository(Categoria::class)->buscarDescripcion($desc_categoria);
+            $noticia = $this->getDoctrine()->getManager()->getRepository(Noticia::class)->buscarTitular($titular_noticia);
+            $comentarios = $this->getDoctrine()->getManager()->getRepository(Comentario::class)->buscarListaN($noticia, $offset, $this->comentarios_por_pagina);
+
+            // normalizamos las fechas de los comentarios            
+            $comentarios = $this->normalizarFechas($comentarios);
+
+            // creamos el response con el estado y la info devuelta
+            $response = new JsonResponse();
+            $response->setStatusCode(200);
+            $response->setData(array(
+                'response' => 'success',
+                'num_pagina' => $num_pagina,
+                'comentarios' => $serializer->serialize($comentarios, 'json')
+            ));
+            return $response;
+        
+        } else return new JsonResponse(null, 405);
+    }     
 
     /**
      * @Route("/aviso-legal", name="aviso_legal")

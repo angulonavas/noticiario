@@ -2,6 +2,6 @@
 	<div class="comentario alert alert-info">
 		<h1>{{comentario.descripcion}}</h1>
 		<hr>
-		<h2 class="mb-0">{{comentario.pseudonimo ~ ' ' ~ comentario.fecha | date("m/d/Y H:i:s")}}</h2>
+		<h2 class="mb-0">{{'@' ~ comentario.pseudonimo | formato_pseudonimo ~ ' ' ~ comentario.fecha | date("d/m/Y H:i:s")}}</h2>
 	</div>
 {% endfor %}

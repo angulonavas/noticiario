@@ -14,4 +14,9 @@ class AppRuntime {
         return $url;
     }    
 
+    public function formatear_pseudonimoFilter($texto) {
+        $pseudonimo = str_replace("@", "", $texto);
+        return $pseudonimo;
+    }    
+
 }
