@@ -10,12 +10,7 @@
 
         {% block stylesheets %}
             <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-            <!-- Carga hoja de estilos cuando las demas conciones no se cumplen ROJO -->
             <link rel="stylesheet" href="{{ asset('base/css/estilos_web.css') }}" type="text/css">
-            <!-- Carga hoja de estilos entre una resolucion maxima y minima -->
-            <link rel="stylesheet" media="screen and (min-width: 100px) and (max-width: 1200px)" href="{{ asset('base/css/estilos_movil.css') }}" />
-            
-            <!-- <link rel="stylesheet" href="{{ asset('magic-master/magic.css') }}" type="text/css"> -->
 
         {% endblock %}
 

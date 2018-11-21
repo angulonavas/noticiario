@@ -1,7 +1,5 @@
 {% for noticia in noticias %}
 
-	<hr>
-
 	<div class="container-fluid">
        	
        	{% if noticia.tipoMedia %}
@@ -12,7 +10,7 @@
        		</div>
 		{% endif %}
 		
-		<div class="alert alert-success">
+		<div id="noticia" class="alert alert-success">
 			<h6>Fuente: {{noticia.fuente}}</h6>
 			<hr>
 			<h1><a href="{{ path('noticia_completa', {
@@ -23,6 +21,5 @@
 			<h3>{{noticia.autor ~ ' ' ~ noticia.fecha | date("d/m/Y H:i") ~ 'h' }}</h3>
 		</div>
 	</div>
+	<hr>
 {% endfor %}
-
-<hr>

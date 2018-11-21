@@ -3,110 +3,122 @@
 	font-family: "OpenSans-Light"; 
 	src: url("../../fuentes/open-sans/OpenSans-Light.ttf"); }
 
-body {
-	font: 1em "OpenSans-Light", Sans;
-	font-size: 20px;
-}
+/* fuente por defecto para la web */
+body { font: 1em "OpenSans-Light", Sans; }
 
-/* diseño para webs */
-@media (min-width: 1200px) {
+/* los enlaces no tendrán subrayado */
+a:hover { text-decoration: none; }
 
-	body {
-    	margin-left: auto;
-    	margin-right: auto;
-    	width: 40%;
-    }
-
-	.titulo_cabecera {
-		font: 1em "OpenSans-Light", Sans;
-		font-size: 50px;
-		text-align: center;
-		font-style: italic;
-	}
-
-	h1 {
-		font-family: 'Open Sans';
-	    font-size: 40px;
-	    font-weight: 600;    
-	    margin-top: 20px;
-	}
-
-	h2 {
-		font-family: 'OpenSans-Light';
-	    font-size: 22px;
-	    font-style: italic;
-	    margin-top: 20px;
-	}	
-
-	h3 {
-		font-family: 'Open Sans';
-		font-size: 15px;
-	    font-weight: 400;
-	    color: green;
-	    margin-top: 20px;
-	}
-
-	h4 {
-		font-family: 'Open Sans';
-		font-size: 20px;
-	    font-weight: 200;
-	    line-height: 200%;
-	    margin-top: 20px;
-	}
-
-	h6 {
-		font-size: 12px;
-		margin-top: 0em;
-		padding-top: 0em;
-		text-align: right;
-	}
-
-	hr {
-		margin-top: 0.1em;
-	}
-
-	.comentario h1 {
-		font-family: 'Open Sans';
-	    font-size: 16px;
-	}
-
-	.comentario h2 {
-		font-family: 'Open Sans';
-		font-size: 15px;
-	    font-weight: 400;
-	    color: green;
-	    /*margin-bottom: 20px;*/
-	    text-align: right;
-	    /*background-color: #f00;*/
-	}	
-
-	footer {
-		font: 1em "OpenSans-Light", Sans;
-		font-size: 15px;
-		font-style: italic;	
-		
-		margin-top: 0;
-		margin-bottom: 10px
-		padding: 0;
-	}	
-}
-
-a:link, a:visited {
-	color: #1a7a14;
-}
-a:hover {
-	color: #b6e3b2;
-    text-decoration: none;
-}
-
+/* bloque de cabecera y su texto */
 .bloque_cabecera {
 	background-color: #c4f7c0;
+	width: 100%;
+	margin: 0 auto;
 }
 
-.form-group label {
-	display:none;
+.bloque_cabecera h1 {
+	font-size: 2em;
+	text-align: center;
+	font-style: italic;
 }
 
+/* menú */
+nav { font-size: 1.2em; }
+
+/* bloque contenedor de la lista de noticias y el despliegue de la noticia*/
+.cuerpo { 
+	margin: 0 auto; 
+	padding: 0;
+}
+
+@media (min-width: 100px) { .cuerpo { width: 100%; }}
+@media (min-width: 800px) {	.cuerpo { width: 50%; }}
+
+/* pedimos ajuste de todos los elementos de la lista*/
+div#lista_noticias img {
+	width: 100%;
+}
+
+/* pedimos ajuste de todos los elementos de la lista*/
+div#lista_noticias div {
+	width: 100%;
+	margin: 0 auto;
+	padding: 0;
+}
+
+/* fondo de la noticia */
+div#noticia { background-color:#fafafa; }
+
+/* titular de la noticia */
+div#noticia h1 {
+	font-family: 'Open Sans';
+    font-size: 2em;
+    font-weight: 600;    
+    margin: .5em 10px .5em 10px;
+    color: #1a7a14;
+}
+
+div#noticia h1 a:link, div#noticia h1 a:visited { color: #1a7a14; }
+div#noticia h1 a:hover { color: #b6e3b2; }
+
+/* titula de la noticia cuando está desplegada*/
+div#noticia h1.noticia_desplegada {
+	color: #000;
+}
+
+/* pie de imagen o fuente de la imagen */
+div#noticia h6 {
+	font-size: .75em;
+	margin: .5em;
+	text-align: right;
+}
+
+div#noticia hr { margin-top: 0.5em;	}
+
+/* la clave de la noticia */
+div#noticia h2 {
+    font-size: 1.25em;
+    font-style: italic;
+    margin: 1.25em 10px 1.25em 10px;
+}
+
+/* el autor y fecha de la noticia */
+div#noticia h3 {
+	font-family: 'Open Sans';
+	font-size: 1em;
+    font-weight: 400;
+    margin: 1em 10px 1em 10px;
+    color: green;
+}
+
+/* cuerpo de la noticia */
+div#noticia h4 {
+	font-family: 'Open Sans';
+	font-size: 1.5em;
+    font-weight: 200;
+    line-height: 200%;
+    margin: .5em 10px .5em 10px;
+}
+
+/* descripción del comentario */
+div#lista_comentarios h1 {
+	font-family: 'Open Sans';
+    font-size: 1em;
+}
+
+/* cuerpo del comentario */
+div#lista_comentarios h2 {
+	font-family: 'Open Sans';
+	font-size: 1em;
+    font-weight: 400;
+    color: green;
+    text-align: right;
+}
+
+/* no queremos que se muestren etiquetas en el formulario */
+.form-group label {	display:none; }
+
+/* no queremos que se muestren los puntos de los mensajes de error del formulario */
 .form-group ul {
     list-style-type: none;
     margin: 0;
@@ -114,22 +126,31 @@ a:hover {
 }
 
 .form-group li {
+	font-size:1em;
 	font-style: italic;	
 	color: red;
 }
 
+/* mensaje de error del formulario que se muestra arriba del todo */
 .mensaje_error {
-	font: 1em "OpenSans-Light", Sans;
-	font-size: 30px;
+	font-size: 1em;
 	font-style: italic;	
-	background-color: red;
-	color: white;
+	font-weight: 400;
+	color: red;
 }
 
 .mensaje_enviado {
-	font: 1em "OpenSans-Light", Sans;
-	font-size: 30px;
+	font-size: 1em;
 	font-style: italic;	
-	background-color: green;
-	color:white;
+	font-weight: 400;
+	color:green;
 }
+
+
+/* pie de página */
+footer {
+	font-size: 1em;
+	font-style: italic;	
+	margin-bottom: 1em;
+	padding: 0;
+}	

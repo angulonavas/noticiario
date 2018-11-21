@@ -2,42 +2,20 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('anuncios/css/estilos.css') }}" type="text/css">
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
-    {#<link rel="stylesheet" href="{{ asset('images/iconos/fontawesome/web-fonts-with-css/css/fontawesome.min.css') }}">#}
 
 {% endblock %}
 
 {% block body %}
-    <div class="container">
+    <div class="container-fluid">
 
-        <div>
-            {% include('cabecera.html.twig') %}
-        </div>
+        {% include('cabecera.html.twig') %}
 
-        {% if mensaje_formulario is defined %}    
-            {% if mensaje_formulario.estado == 'error' %}
-                <div class="mensaje_error">
-                    {{ mensaje_formulario.descripcion }}
-                </div>
-            {% elseif mensaje_formulario.estado == 'ok' %}
-                <div class="mensaje_enviado">
-                    {{ mensaje_formulario.descripcion }}
-                </div>
-            {% endif %}                
-        {% endif %}
-
-        <div>
-            {% include('menu.html.twig') %}
-        </div>
+        {% include('menu.html.twig') %}
 
         {% block cuerpo %}{% endblock %}
 
-        <div class="row">
-            <div class="col">
-                {% include('pie.html.twig') %}
-            </div>
-        </div>
+        {% include('pie.html.twig') %}
 
         {% block javascripts %}
             {{ parent() }}

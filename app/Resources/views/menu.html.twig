@@ -1,21 +1,35 @@
+{% set mitad = categorias|length / 2 %}
+{% set fin = categorias|length %}    
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-
-	<a class="navbar-brand" href="{{ path('raiz') }}">
-		<img src="/images/mundo_reves.png" width="20" height="20" alt="">&nbsp;Desde otra lógica
-	</a>
-	
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    	<span class="navbar-toggler-icon"></span>
-  	</button>
-
-  	<div class="collapse navbar-collapse" id="navbarSupportedContent">
-    	<ul class="navbar-nav mr-auto">
-			{% for categoria in categorias %}
-				<li><a href="{{ path('categoria_lista', {
-						'desc_categoria': categoria.descripcion
-					}) }}"  class="nav-link">{{categoria.descripcion}}</a></li>
-			{% endfor %}    		
-		</ul>
-	</div>
+    <div class="navbar-collapse collapse w-100 dual-collapse2 order-1 order-md-0">
+        <ul class="navbar-nav ml-auto text-center">
+            {% for categoria in categorias|slice(0, mitad) %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('categoria_lista', {
+                        'desc_categoria': categoria.descripcion
+                    }) }}">{{categoria.descripcion}}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="mx-auto my-2 order-0 order-md-1 position-relative">
+        <a class="mx-auto" href="{{ path('raiz') }}">
+            <img src="/images/mundo_reves.png" class="rounded-circle">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+    <div class="navbar-collapse collapse w-100 dual-collapse2 order-2 order-md-2">
+        <ul class="navbar-nav mr-auto text-center">
+            {% for categoria in categorias|slice(mitad) %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('categoria_lista', {
+                        'desc_categoria': categoria.descripcion
+                    }) }}">{{categoria.descripcion}}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 </nav>
-<br>

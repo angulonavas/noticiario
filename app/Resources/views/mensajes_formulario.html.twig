@@ -1,0 +1,19 @@
+{# A continuación el mensaje del formulario: acierto o error #}
+{% if app.request.get('mensaje_formulario_estado') != null %}
+	{% set mensaje_formulario_estado = app.request.get('mensaje_formulario_estado') %}
+	{% set mensaje_formulario_descripcion = app.request.get('mensaje_formulario_descripcion') %}
+	{% if mensaje_formulario_estado == 'ok' %}
+        <div class="alert alert-success mensaje_enviado">
+            {{ mensaje_formulario_descripcion }}
+        </div><hr>
+    {% endif %}
+
+{% endif %}
+
+{% if mensaje_formulario is defined %}    
+    {% if mensaje_formulario.estado == 'error' %}
+        <div class="alert alert-danger mensaje_error">
+            {{ mensaje_formulario.descripcion }}
+        </div><hr>
+    {% endif %}                
+{% endif %}

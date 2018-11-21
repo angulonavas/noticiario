@@ -96,7 +96,6 @@ class NoticiaController extends Controller {
         return $objetos;
     }
 
-
     /**
      * es un servicio web que devuelve N noticias siguiente a $ultima_noticia:
      * @Route("/{desc_categoria}/pagina/{num_pagina}", name="cargar_pagina")
@@ -158,10 +157,15 @@ class NoticiaController extends Controller {
         $form = $this->createForm(ComentarioType::class, $comentario);
         $form->handleRequest($request);
 
+
         $mensaje = [
             'estado' => 'vacio',
             'descripcion' => '',
         ];
+
+        if ($request->query->get("mensaje") != null) {
+            $mensaje = $equest->query->get("mensaje");
+        }
 
         // si el formulario se ha enviado y es válido...
         if ($form->isSubmitted() && $form->isValid()) {
@@ -194,7 +198,9 @@ class NoticiaController extends Controller {
             // redireccionando a la siguiente ruta para evitar resubmit, duplicados en la BD. (Patrón PRG)
             return $this->redirectToRoute('noticia_completa', [
                 'titular_noticia' => $titular_noticia,
-                'desc_categoria' => $desc_categoria
+                'desc_categoria' => $desc_categoria,
+                'mensaje_formulario_estado' => $mensaje['estado'],
+                'mensaje_formulario_descripcion' => $mensaje['descripcion']
             ]);
 
         } else if ($form->isSubmitted() && !$form->isValid()) {

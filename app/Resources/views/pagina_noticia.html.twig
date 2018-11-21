@@ -4,60 +4,72 @@
 {% block meta %} <meta name="description" content="{{noticia.clave}}"> {% endblock %}
 
 {% block cuerpo %}
-	<div>
-        {% if noticia.tipoMedia %}
-            <img class="img-fluid" src="{{noticia.media}}" alt="Card image cap">
-        {% else %}
-            <div class="embed-responsive embed-responsive-16by9">
-                <iframe class="embed-responsive-item" src="{{noticia.media}}" frameborder="0" allowfullscreen></iframe>
-            </div>
-        {% endif %}
-
-        <h6>Fuente: {{noticia.fuente}}</h6>
-        <hr>
-
-		<h1>{{noticia.titular}}</h1>
-		<h2>{{noticia.clave | nl2br}}</h2>
-		<h3>{{noticia.autor ~ ' ' ~ noticia.fecha | date("m/d/Y H:i") ~ 'h' }}</h3>
-		<h4>{{noticia.cuerpo | nl2br}}</h4>
-	</div>
-
-    <div class="alert alert-dark" role="alert">
-        Comentarios
-    </div>
-
-    <div id="lista_comentarios">
-        {% include('lista_comentarios.html.twig') %}
-    </div>	
-
-    <!-- Bloque para la llamada ajax -->
-    <div>
-        <input type="hidden" id="num_pagina" name="num_pagina" value="{{num_pagina}}">
-        <button type="button" class="btn btn-primary btn-lg btn-block" onClick="cargarComentarios();">Mostrar más</button>
-    </div>
 
     <hr>
 
-    <div class="alert alert-dark" role="alert">
-        Comenta la noticia libremente
-    </div>
+    {% include('mensajes_formulario.html.twig') %}
 
-    <div>
-        {{ form_start(form) }}
-        {{ form_errors(form) }}
-        <div class="form-group">
-            <div class="input-group mb-2 mr-sm-2">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">@</div>
+    <div class="cuerpo">
+    	<div id="noticia">
+            {% if noticia.tipoMedia %}
+                <img class="img-fluid" src="{{noticia.media}}" alt="Card image cap">
+            {% else %}
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" src="{{noticia.media}}" frameborder="0" allowfullscreen></iframe>
                 </div>
-                {{ form_row(form.pseudonimo) }}
-            </div>
+            {% endif %}
+
+            <h6>Fuente: {{noticia.fuente}}</h6>
+            <hr>
+
+    		<h1 class="noticia_desplegada">{{noticia.titular}}</h1>
+    		<h2>{{noticia.clave | nl2br}}</h2>
+    		<h3>{{noticia.autor ~ ' ' ~ noticia.fecha | date("m/d/Y H:i") ~ 'h' }}</h3>
+    		<h4>{{noticia.cuerpo | nl2br}}</h4>
+    	</div>
+
+        <hr>
+
+        <div class="alert alert-dark" role="alert">
+            Comentarios
         </div>
-        <div class="form-group">{{ form_row(form.email) }}</div>
-        <div class="form-group">{{ form_row(form.descripcion) }}</div>
-        <div class="form-group">{{ form_row(form.enviar) }}</div>
-        {{ form_end(form) }}
+
+        <div id="lista_comentarios">
+            {% include('lista_comentarios.html.twig') %}
+        </div>	
+
+        <hr>
+
+        <!-- Bloque para la llamada ajax -->
+        <div>
+            <input type="hidden" id="num_pagina" name="num_pagina" value="{{num_pagina}}">
+            <button type="button" class="btn btn-primary btn-lg btn-block" onClick="cargarComentarios();">Mostrar más</button>
+        </div>
+
+        <hr>
+
+        <div class="alert alert-dark" role="alert">
+            Comenta la noticia libremente
+        </div>
+
+        <div>
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            <div class="form-group">
+                <div class="input-group mb-2 mr-sm-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">@</div>
+                    </div>
+                    {{ form_row(form.pseudonimo) }}
+                </div>
+            </div>
+            <div class="form-group">{{ form_row(form.email) }}</div>
+            <div class="form-group">{{ form_row(form.descripcion) }}</div>
+            <div class="form-group">{{ form_row(form.enviar) }}</div>
+            {{ form_end(form) }}
+        </div>
     </div>
+    <hr>
 
 {% endblock %}
 
